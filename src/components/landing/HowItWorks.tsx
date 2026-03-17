@@ -4,11 +4,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { 
-  UserPlus, 
   Brain, 
   Zap, 
-  CheckCircle2, 
-  ChevronRight 
+  CheckCircle2 
 } from "lucide-react";
 
 const STEPS = [
@@ -109,22 +107,6 @@ export const HowItWorks = () => {
                       {idx + 1}
                     </div>
                   </motion.div>
-
-                  {/* Arrow at the end of the line (left of next step) */}
-                  {idx < STEPS.length - 1 && (
-                    <motion.div 
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 0.4, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ 
-                        duration: 0.3,
-                        delay: 1.0 + idx * 0.8 // Synced with line drawing completion
-                      }}
-                      className="hidden lg:flex absolute top-8 -right-[calc(50%-32px)] translate-x-1/2 -translate-y-1/2 text-white/40"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </motion.div>
-                  )}
                 </div>
 
                 <h3 className="text-lg font-bold text-white mb-1 tracking-tight group-hover:text-white/90">
