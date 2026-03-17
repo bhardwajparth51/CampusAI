@@ -96,10 +96,10 @@ const CyclingHeadline = () => {
   return (
     <motion.h1 
       variants={fadeUp}
-      className="mx-auto mb-6 max-w-none text-3xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+      className="mx-auto mb-6 max-w-none text-3xl font-medium tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
       style={{ letterSpacing: "-0.04em" }}
     >
-      <span className="block mb-2 text-center opacity-95">Every complaint.</span>
+      <span className="block mb-2 text-center opacity-90">Every complaint.</span>
       <div className="relative h-[1.12em] overflow-hidden flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.span
@@ -109,7 +109,7 @@ const CyclingHeadline = () => {
             animate="animate"
             exit="exit"
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bg-gradient-to-r from-[#0062FF] via-blue-400 to-cyan-400 bg-clip-text text-transparent sm:whitespace-nowrap inline-flex items-center justify-center leading-none"
+            className="absolute bg-gradient-to-r from-[#0062FF] via-blue-400 to-cyan-400 bg-clip-text text-transparent sm:whitespace-nowrap inline-flex items-center justify-center leading-none font-medium"
           >
             {CYCLING_WORDS[index]}
           </motion.span>
