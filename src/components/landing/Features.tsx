@@ -107,7 +107,7 @@ const FEATURES = [
 
 export const Features = () => {
   return (
-    <section id="features" className="py-24 px-6 md:px-12 relative overflow-hidden">
+    <section id="features" className="pt-12 pb-24 px-6 md:px-12 relative">
       {/* Background Decorative orbs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-zinc-500/5 blur-[160px] -z-10 rounded-full" />
       

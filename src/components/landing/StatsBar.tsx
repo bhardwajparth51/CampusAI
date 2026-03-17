@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
  */
 export const StatsBar = () => {
   return (
-    <div className="w-full relative py-12 flex justify-center overflow-hidden">
+    <div className="w-full relative py-8 flex justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent opacity-50" />
       <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
       <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />

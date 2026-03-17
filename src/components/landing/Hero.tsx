@@ -139,7 +139,7 @@ export const Hero = () => {
   return (
     <>
       <Background />
-      <main className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 pb-24 text-center">
+      <main className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 pb-12 text-center">
         <motion.div 
           className="max-w-4xl w-full relative"
           variants={staggerContainer}
