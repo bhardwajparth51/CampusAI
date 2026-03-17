@@ -4,6 +4,7 @@ import React from "react";
 import { useActiveNav } from "@/hooks/useActiveNav";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
+import { Features } from "@/components/landing/Features";
 
 /**
  * Main Landing Page entry point.
@@ -23,6 +24,7 @@ export default function Home() {
       />
 
       <Hero />
+      <Features />
     </div>
   );
 }
