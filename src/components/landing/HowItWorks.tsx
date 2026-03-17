@@ -54,46 +54,72 @@ export const HowItWorks = () => {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          {/* Connector Line (Desktop) */}
-          <div className="hidden lg:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-12 -z-10" />
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative"
+        >
+          {/* Animated Connector Line (Desktop) */}
+          <motion.div 
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
+            className="hidden lg:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-12 -z-10 origin-left" 
+          />
 
           {STEPS.map((step, idx) => (
-            <div key={idx} className="relative group">
-              <Reveal delay={`${0.2 + idx * 0.1}s`}>
-                <div className="flex flex-col items-center text-center">
-                  <div className="relative mb-6">
-                    {/* Glow background */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${step.color} blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                    
-                    <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center relative backdrop-blur-xl group-hover:scale-110 group-hover:border-white/20 transition-all duration-500">
+            <motion.div 
+              key={idx} 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.6, delay: 0.2 + idx * 0.15 }}
+              className="relative group"
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-6">
+                  {/* Glow background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${step.color} blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  
+                  <motion.div 
+                    whileHover={{ y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center relative backdrop-blur-xl group-hover:scale-110 group-hover:border-white/20 transition-all duration-500"
+                  >
+                    <motion.div
+                      animate={{ y: [0, -3, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: idx * 0.5 }}
+                    >
                       {step.icon}
-                      
-                      {/* Step Number Badge */}
-                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-black border border-white/10 flex items-center justify-center text-[10px] font-bold text-white/40 group-hover:text-blue-400 group-hover:border-blue-400/50 transition-colors duration-300">
-                        {idx + 1}
-                      </div>
+                    </motion.div>
+                    
+                    {/* Step Number Badge */}
+                    <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-black border border-white/10 flex items-center justify-center text-[10px] font-bold text-white/40 group-hover:text-blue-400 group-hover:border-blue-400/50 transition-colors duration-300">
+                      {idx + 1}
                     </div>
+                  </motion.div>
 
-                    {/* Arrow (Desktop) */}
-                    {idx < STEPS.length - 1 && (
-                      <div className="hidden lg:flex absolute top-1/2 -right-4 translate-x-1/2 -translate-y-1/2 text-white/5">
-                        <ChevronRight className="w-5 h-5" />
-                      </div>
-                    )}
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white mb-1 tracking-tight group-hover:text-white/90">
-                    {step.title}
-                  </h3>
-                  <p className="text-white/30 text-sm font-mono lowercase">
-                    {step.description}
-                  </p>
+                  {/* Arrow (Desktop) */}
+                  {idx < STEPS.length - 1 && (
+                    <div className="hidden lg:flex absolute top-1/2 -right-4 translate-x-1/2 -translate-y-1/2 text-white/5">
+                      <ChevronRight className="w-5 h-5" />
+                    </div>
+                  )}
                 </div>
-              </Reveal>
-            </div>
+
+                <h3 className="text-lg font-bold text-white mb-1 tracking-tight group-hover:text-white/90">
+                  {step.title}
+                </h3>
+                <p className="text-white/30 text-sm font-mono lowercase">
+                  {step.description}
+                </p>
+              </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
