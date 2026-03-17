@@ -4,7 +4,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import { CTAButton } from "@/components/ui/CTAButton";
 
-const NAV_LINKS = ["Pricing", "Docs", "Resources"] as const;
+const NAV_LINKS = [
+  { name: "Features", href: "#features" },
+  { name: "Process", href: "#process" },
+  { name: "GitHub", href: "https://github.com/bhardwajparth51/CampusAI", external: true }
+] as const;
+
 const GLOW_LINE_WIDTH = 259;
 
 interface NavbarProps {
@@ -25,9 +30,15 @@ export const Navbar = ({
   navRef, 
   linkRefs 
 }: NavbarProps) => {
-  const handleNavClick = (e: React.MouseEvent, index: number) => {
+  const handleNavClick = (e: React.MouseEvent, index: number, isExternal?: boolean) => {
+    if (isExternal) return;
     e.preventDefault();
     setActiveIndex(index);
+    const href = NAV_LINKS[index].href;
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -58,19 +69,21 @@ export const Navbar = ({
           style={{ width: GLOW_LINE_WIDTH, zIndex: 10 }}
         />
 
-        <div className="text-base font-normal text-white font-mono select-none tracking-tight">CampusAI ®</div>
+        <Link href="/" className="text-base font-normal text-white font-mono select-none tracking-tight">CampusAI ®</Link>
         
         <ul className="hidden gap-10 text-sm font-normal tracking-wide sm:flex relative" role="list">
           {NAV_LINKS.map((link, index) => (
-            <li key={link}>
+            <li key={link.name}>
               <a
-                href={`#${link.toLowerCase()}`}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
                 ref={el => { linkRefs.current[index] = el; }}
-                onClick={(e) => handleNavClick(e, index)}
+                onClick={(e) => handleNavClick(e, index, link.external)}
                 className={`relative py-1 transition-colors duration-200 hover:text-white ${activeIndex === index ? "text-white" : "text-white/60"}`}
                 aria-current={activeIndex === index ? "page" : undefined}
               >
-                {link}
+                {link.name}
               </a>
             </li>
           ))}

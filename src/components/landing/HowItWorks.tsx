@@ -39,7 +39,7 @@ const STEPS = [
 
 export const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="py-24 px-6 md:px-12 relative">
+    <section id="process" className="py-24 px-6 md:px-12 relative">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16 px-4">
           <Reveal delay="0.1s">
