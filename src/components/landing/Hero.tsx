@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CTAButton } from "@/components/ui/CTAButton";
 import { DashboardPreview } from "./DashboardPreview";
@@ -58,12 +59,12 @@ const Background = () => (
     <motion.div
       animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
       transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      className="absolute top-[15%] left-[5%] w-[30rem] h-[30rem] bg-blue-600/10 blur-[130px] rounded-full"
+      className="absolute top-[15%] left-[5%] w-[30rem] h-[30rem] bg-white/5 blur-[130px] rounded-full"
     />
     <motion.div
       animate={{ x: [0, -40, 0], y: [0, 50, 0] }}
       transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-[25%] right-[5%] w-[35rem] h-[35rem] bg-cyan-600/5 blur-[160px] rounded-full"
+      className="absolute bottom-[25%] right-[5%] w-[35rem] h-[35rem] bg-zinc-500/5 blur-[160px] rounded-full"
     />
   </div>
 );
@@ -147,7 +148,7 @@ export const Hero = () => {
           <GridLines />
           
           <div className="flex flex-col items-center">
-            <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-500/5 blur-[120px] -z-10" aria-hidden="true" />
+            <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-80 h-80 bg-white/5 blur-[120px] -z-10" aria-hidden="true" />
             
             <CyclingHeadline />
             
@@ -162,9 +163,11 @@ export const Hero = () => {
               variants={fadeUp}
               className="flex flex-col items-center justify-center gap-4 sm:flex-row mb-8"
             >
-              <CTAButton className="w-full px-10 py-[1.125rem] text-base sm:w-auto hover:scale-[1.02] cursor-pointer transition-transform duration-300">
-                Get Started for Free
-              </CTAButton>
+              <Link href="/signup" className="w-full sm:w-auto">
+                <CTAButton className="w-full px-10 py-[1.125rem] text-base hover:scale-[1.02] cursor-pointer transition-transform duration-300">
+                  Get Started for Free
+                </CTAButton>
+              </Link>
               <button 
                 type="button"
                 className="w-full cursor-pointer rounded-[0.625rem] border border-white/10 bg-white/5 px-8 py-[1.125rem] text-base font-medium text-white transition-all duration-300 hover:bg-white/10 hover:border-white/20 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] sm:w-auto hover:scale-[1.02]"

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Icons } from "@/components/ui/Icons";
+import { account } from "@/lib/appwrite";
 
 // --- Sub-components ---
 
@@ -42,8 +43,31 @@ const DropdownItem = ({
 
 export default function Topbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const currentUser = await account.get();
+        setUser(currentUser);
+      } catch (err) {
+        console.error("Failed to fetch user", err);
+      }
+    };
+    getUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await account.deleteSession("current");
+      router.push("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -71,6 +95,16 @@ export default function Topbar() {
       breadcrumbs: segments.length > 1 ? ["Dashboard", formattedTitle] : [formattedTitle],
     };
   }, [pathname]);
+
+  const userInitials = useMemo(() => {
+    if (!user?.name) return "??";
+    return user.name
+      .split(" ")
+      .map((n: string) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }, [user]);
 
   return (
     <header
@@ -119,11 +153,13 @@ export default function Topbar() {
             `}
           >
             <div className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-[10px] font-bold text-white/90 transition-all hover:border-white/20">
-              AD
+              {userInitials}
             </div>
             <div className="hidden flex-col items-start leading-[1.1] lg:flex">
-              <span className="text-[12px] font-bold text-white/90">Admin</span>
-              <span className="text-[10px] font-medium tracking-tight text-white/30">Main Block</span>
+              <span className="text-[12px] font-bold text-white/90">{user?.name || "Loading..."}</span>
+              <span className="text-[10px] font-medium tracking-tight text-white/30">
+                {user?.prefs?.role === 'admin' ? 'Admin' : 'Student'}
+              </span>
             </div>
             <Icons.ChevronDown 
               className={`h-2.5 w-2.5 text-white transition-all ${showDropdown ? "rotate-180 opacity-80" : "opacity-20"}`} 
@@ -158,6 +194,7 @@ export default function Topbar() {
                   label="Log out" 
                   icon={Icons.LogOut} 
                   variant="danger" 
+                  onClick={handleLogout}
                 />
               </div>
             </div>
