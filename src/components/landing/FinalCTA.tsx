@@ -13,7 +13,7 @@ export const FinalCTA = () => {
       {/* Background Decorative Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-zinc-500/5 blur-[160px] -z-10 rounded-full" />
       
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto text-center">
         <Reveal delay="0.1s">
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tighter leading-[1.1]">
             Ready to modernize <br />

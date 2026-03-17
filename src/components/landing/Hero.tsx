@@ -141,7 +141,7 @@ export const Hero = () => {
       <Background />
       <main className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 pb-12 text-center">
         <motion.div 
-          className="max-w-4xl w-full relative"
+          className="max-w-5xl w-full relative"
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
