@@ -19,8 +19,8 @@ const FEATURES = [
     description: "Every complaint is analyzed by an AI agent that classifies the category, scores priority, generates a summary, and suggests a resolution action — all before an admin even opens the dashboard.",
     icon: <Bot className="w-6 h-6 text-purple-400" />,
     tags: ["Groq LLM", "FastAPI", "Auto-classification", "Priority scoring"],
-    span: "md:col-span-2 md:row-span-1",
-    color: "from-purple-500/10 to-transparent",
+    span: "md:col-span-2 md:row-span-2",
+    color: "from-purple-600/20 via-purple-500/5 to-transparent",
     visual: (
       <div className="mt-6 bg-black/40 rounded-xl p-4 border border-white/5 font-mono text-[10px] md:text-xs text-blue-300 leading-relaxed overflow-hidden">
         <div className="flex flex-col gap-1">
@@ -54,8 +54,8 @@ const FEATURES = [
     description: "Verified students upvote complaints. The AI agent re-evaluates priority when upvote thresholds are crossed.",
     icon: <ArrowBigUp className="w-6 h-6 text-indigo-400" />,
     tags: ["1 vote per student", "College ID verified"],
-    span: "md:col-span-1 md:row-span-2",
-    color: "from-indigo-500/10 to-transparent",
+    span: "md:col-span-1 md:row-span-3",
+    color: "from-indigo-600/30 via-indigo-500/10 to-transparent text-indigo-100",
     visual: (
       <div className="mt-12 mb-12 flex justify-center items-center">
         <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-[0_0_50px_-10px_rgba(99,102,241,0.2)]">
@@ -112,7 +112,7 @@ const FEATURES = [
     icon: <FileText className="w-6 h-6 text-emerald-400" />,
     tags: ["ReportLab", "Auto-scheduled", "PDF export"],
     span: "md:col-span-2 md:row-span-1",
-    color: "from-emerald-500/10 to-transparent",
+    color: "from-emerald-500/20 via-emerald-400/5 to-transparent",
     visual: (
       <div className="mt-6 flex flex-col gap-2">
         <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
@@ -197,7 +197,7 @@ export const Features = () => {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-3 gap-6 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-6 auto-rows-fr">
           {FEATURES.map((feature, idx) => (
             <div 
               key={idx} 
