@@ -184,7 +184,7 @@ export const Features = () => {
       {/* Background Decorative orbs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60rem] h-[60rem] bg-zinc-500/5 blur-[160px] -z-10 rounded-full" />
       
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16 px-4">
           <Reveal delay="0.1s">
             <span className="text-blue-400 font-mono text-sm tracking-widest uppercase mb-4 block">Features</span>
