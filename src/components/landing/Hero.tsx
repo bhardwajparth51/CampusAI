@@ -96,7 +96,8 @@ const CyclingHeadline = () => {
   return (
     <motion.h1 
       variants={fadeUp}
-      className="mx-auto mb-6 max-w-none text-3xl font-light tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+      className="mx-auto mb-6 max-w-none text-3xl font-extrabold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+      style={{ letterSpacing: "-0.04em" }}
     >
       <span className="block mb-2 text-center opacity-90">Every complaint.</span>
       <div className="relative h-[1.12em] overflow-hidden flex items-center justify-center">
