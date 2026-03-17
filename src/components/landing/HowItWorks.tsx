@@ -64,17 +64,35 @@ export const HowItWorks = () => {
             <div key={idx} className="relative group">
               {/* Individual Connector Segment (Desktop) */}
               {idx < STEPS.length - 1 && (
-                <motion.div 
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  whileInView={{ scaleX: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ 
-                    duration: 0.5, 
-                    delay: 0.6 + idx * 0.8, // Draws after Card idx finishes
-                    ease: "easeInOut" 
-                  }}
-                  className="hidden lg:block absolute top-8 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent -z-10 origin-left" 
-                />
+                <div className="hidden lg:block absolute top-8 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px -z-10">
+                  <motion.div 
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    whileInView={{ scaleX: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: 0.6 + idx * 0.8, 
+                      ease: "easeInOut" 
+                    }}
+                    className="w-full h-full bg-gradient-to-r from-blue-500/50 via-white/10 to-transparent origin-left" 
+                  />
+                  
+                  {/* Gliding Pointer */}
+                  <motion.div
+                    initial={{ x: 0, opacity: 0 }}
+                    whileInView={{ x: "100%", opacity: [0, 1, 1, 0] }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: 0.6 + idx * 0.8,
+                      ease: "easeInOut",
+                      times: [0, 0.1, 0.9, 1]
+                    }}
+                    className="absolute top-1/2 -translate-y-1/2 -ml-2 text-blue-400"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.div>
+                </div>
               )}
 
               <motion.div 
@@ -84,7 +102,7 @@ export const HowItWorks = () => {
                 }}
                 transition={{ 
                   duration: 0.4, 
-                  delay: 0.2 + idx * 0.8 // Card appears, then line follows
+                  delay: 0.2 + idx * 0.8 
                 }}
                 className="relative flex flex-col items-center text-center"
               >
@@ -109,19 +127,6 @@ export const HowItWorks = () => {
                       {idx + 1}
                     </div>
                   </motion.div>
-
-                  {/* Arrow (Desktop) */}
-                  {idx < STEPS.length - 1 && (
-                    <motion.div 
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 0.2, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 1.0 + idx * 0.8 }}
-                      className="hidden lg:flex absolute top-1/2 -right-4 translate-x-1/2 -translate-y-1/2 text-white"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </motion.div>
-                  )}
                 </div>
 
                 <h3 className="text-lg font-bold text-white mb-1 tracking-tight group-hover:text-white/90">
