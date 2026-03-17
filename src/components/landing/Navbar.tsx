@@ -11,7 +11,7 @@ interface NavbarProps {
   activeIndex: number;
   setActiveIndex: (i: number) => void;
   glowLineX: number;
-  navRef: React.RefObject<HTMLElement>;
+  navRef: React.RefObject<any>;
   linkRefs: React.MutableRefObject<(HTMLAnchorElement | null)[]>;
 }
 
