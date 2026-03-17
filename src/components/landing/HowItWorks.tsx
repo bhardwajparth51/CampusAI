@@ -69,8 +69,8 @@ export const HowItWorks = () => {
                   whileInView={{ scaleX: 1, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ 
-                    duration: 0.8, 
-                    delay: 0.7 + idx * 1.3, // Draws after Card idx finishes
+                    duration: 0.5, 
+                    delay: 0.6 + idx * 0.8, // Draws after Card idx finishes
                     ease: "easeInOut" 
                   }}
                   className="hidden lg:block absolute top-8 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent -z-10 origin-left" 
@@ -83,8 +83,8 @@ export const HowItWorks = () => {
                   visible: { opacity: 1, y: 0 }
                 }}
                 transition={{ 
-                  duration: 0.5, 
-                  delay: 0.2 + idx * 1.3 // Card appears, then wait for line drawing
+                  duration: 0.4, 
+                  delay: 0.2 + idx * 0.8 // Card appears, then line follows
                 }}
                 className="relative flex flex-col items-center text-center"
               >
@@ -116,7 +116,7 @@ export const HowItWorks = () => {
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 0.2, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: 1.5 + idx * 1.3 }}
+                      transition={{ delay: 1.0 + idx * 0.8 }}
                       className="hidden lg:flex absolute top-1/2 -right-4 translate-x-1/2 -translate-y-1/2 text-white"
                     >
                       <ChevronRight className="w-5 h-5" />
