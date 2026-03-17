@@ -57,9 +57,9 @@ const FEATURES = [
     span: "md:col-span-4",
     color: "from-indigo-500/10 to-transparent",
     visual: (
-      <div className="mt-8 flex justify-center">
-        <div className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-          <ArrowBigUp className="w-6 h-6 text-white" />
+      <div className="mt-12 mb-12 flex justify-center items-center">
+        <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-[0_0_40px_-10px_rgba(99,102,241,0.2)]">
+          <ArrowBigUp className="w-10 h-10 text-white" />
         </div>
       </div>
     )
