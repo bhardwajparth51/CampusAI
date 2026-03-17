@@ -96,7 +96,7 @@ const CyclingHeadline = () => {
   return (
     <motion.h1 
       variants={fadeUp}
-      className="mx-auto mb-6 max-w-none text-3xl font-light tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+      className="mx-auto mb-6 max-w-none text-3xl font-extrabold tracking-[-0.04em] text-white sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
     >
       <span className="block mb-2 text-center opacity-90">Every complaint.</span>
       <div className="relative h-[1.12em] overflow-hidden flex items-center justify-center">
@@ -138,7 +138,7 @@ export const Hero = () => {
   return (
     <>
       <Background />
-      <main className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 pb-24 text-center">
+      <main className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 pb-10 text-center">
         <motion.div 
           className="max-w-4xl w-full relative"
           variants={staggerContainer}
