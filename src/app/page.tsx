@@ -5,7 +5,6 @@ import { useActiveNav } from "@/hooks/useActiveNav";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
-import { StatsBar } from "@/components/landing/StatsBar";
 
 /**
  * Main Landing Page entry point.
@@ -25,7 +24,6 @@ export default function Home() {
       />
 
       <Hero />
-      <StatsBar />
       <Features />
     </div>
   );
