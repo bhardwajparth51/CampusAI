@@ -8,6 +8,7 @@ import { Features } from "@/components/landing/Features";
 import { StatsBar } from "@/components/landing/StatsBar";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { FinalCTA } from "@/components/landing/FinalCTA";
+import { Footer } from "@/components/landing/Footer";
 
 /**
  * Main Landing Page entry point.
@@ -31,6 +32,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <FinalCTA />
+      <Footer />
     </div>
   );
 }
