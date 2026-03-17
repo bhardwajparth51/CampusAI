@@ -1,0 +1,100 @@
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+import { Reveal } from "@/components/ui/Reveal";
+import { 
+  UserPlus, 
+  Brain, 
+  Zap, 
+  CheckCircle2, 
+  ChevronRight 
+} from "lucide-react";
+
+const STEPS = [
+  {
+    title: "Student submits",
+    description: "complaint",
+    icon: <UserPlus className="w-6 h-6 text-blue-400" />,
+    color: "from-blue-500/20 to-transparent"
+  },
+  {
+    title: "ML classifies",
+    description: "it instantly",
+    icon: <Brain className="w-6 h-6 text-purple-400" />,
+    color: "from-purple-500/20 to-transparent"
+  },
+  {
+    title: "Auto-prioritized",
+    description: "by severity",
+    icon: <Zap className="w-6 h-6 text-amber-400" />,
+    color: "from-amber-500/20 to-transparent"
+  },
+  {
+    title: "Admin resolves",
+    description: "with data",
+    icon: <CheckCircle2 className="w-6 h-6 text-emerald-400" />,
+    color: "from-emerald-500/20 to-transparent"
+  }
+];
+
+export const HowItWorks = () => {
+  return (
+    <section id="how-it-works" className="py-24 px-6 md:px-12 relative">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16 px-4">
+          <Reveal delay="0.1s">
+            <span className="text-blue-400 font-mono text-sm tracking-widest uppercase mb-4 block">Process</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+              How it works
+            </h2>
+            <p className="text-white/40 text-lg max-w-2xl mx-auto font-light">
+              From submission to resolution in four effortless steps.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          {/* Connector Line (Desktop) */}
+          <div className="hidden lg:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-12 -z-10" />
+
+          {STEPS.map((step, idx) => (
+            <div key={idx} className="relative group">
+              <Reveal delay={`${0.2 + idx * 0.1}s`}>
+                <div className="flex flex-col items-center text-center">
+                  <div className="relative mb-6">
+                    {/* Glow background */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${step.color} blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    
+                    <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center relative backdrop-blur-xl group-hover:scale-110 group-hover:border-white/20 transition-all duration-500">
+                      {step.icon}
+                      
+                      {/* Step Number Badge */}
+                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-black border border-white/10 flex items-center justify-center text-[10px] font-bold text-white/40 group-hover:text-blue-400 group-hover:border-blue-400/50 transition-colors duration-300">
+                        {idx + 1}
+                      </div>
+                    </div>
+
+                    {/* Arrow (Desktop) */}
+                    {idx < STEPS.length - 1 && (
+                      <div className="hidden lg:flex absolute top-1/2 -right-4 translate-x-1/2 -translate-y-1/2 text-white/5">
+                        <ChevronRight className="w-5 h-5" />
+                      </div>
+                    )}
+                  </div>
+
+                  <h3 className="text-lg font-bold text-white mb-1 tracking-tight group-hover:text-white/90">
+                    {step.title}
+                  </h3>
+                  <p className="text-white/30 text-sm font-mono lowercase">
+                    {step.description}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
