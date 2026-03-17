@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { 
+  UserPlus,
   Brain, 
   Zap, 
   CheckCircle2 

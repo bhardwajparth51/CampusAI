@@ -7,6 +7,7 @@ import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
 import { StatsBar } from "@/components/landing/StatsBar";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { FinalCTA } from "@/components/landing/FinalCTA";
 
 /**
  * Main Landing Page entry point.
@@ -29,6 +30,7 @@ export default function Home() {
       <StatsBar />
       <Features />
       <HowItWorks />
+      <FinalCTA />
     </div>
   );
 }
