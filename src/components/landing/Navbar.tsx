@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { CTAButton } from "@/components/ui/CTAButton";
 
 const NAV_LINKS = [
-  { name: "Features", href: "#features" },
-  { name: "Process", href: "#process" },
+  { name: "Features", href: "#features", external: false },
+  { name: "Process", href: "#process", external: false },
   { name: "GitHub", href: "https://github.com/bhardwajparth51/CampusAI", external: true }
 ] as const;
 
