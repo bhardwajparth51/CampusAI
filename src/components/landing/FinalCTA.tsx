@@ -11,7 +11,7 @@ export const FinalCTA = () => {
   return (
     <section className="py-32 px-6 relative overflow-hidden">
       {/* Background Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-blue-500/10 blur-[120px] -z-10 rounded-full" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-zinc-500/5 blur-[160px] -z-10 rounded-full" />
       
       <div className="max-w-4xl mx-auto text-center">
         <Reveal delay="0.1s">
