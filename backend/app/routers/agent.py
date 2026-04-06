@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import complaint as complaint_models
 from ..schemas import complaint as complaint_schemas
-from .reasoning import analyze_complaint_with_llm
+from ..agent.reasoning import analyze_complaint_with_llm
 
 router = APIRouter(prefix="/v1/agent", tags=["agent"])
 

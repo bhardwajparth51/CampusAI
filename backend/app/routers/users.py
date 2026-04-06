@@ -26,6 +26,13 @@ def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+@router.get("/me", response_model=user_schemas.User)
+def read_user_me(email: str, db: Session = Depends(get_db)):
+    db_user = db.query(user_models.User).filter(user_models.User.email == email).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found in local database")
+    return db_user
+
 @router.get("/", response_model=List[user_schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = db.query(user_models.User).offset(skip).limit(limit).all()
