@@ -1,23 +1,92 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import ManagementTable from "@/components/dashboard/management/ManagementTable";
+import ComplaintDetailSidebar from "@/components/dashboard/management/ComplaintDetailSidebar";
+import { Reveal } from "@/components/ui/Reveal";
+import { account } from "@/lib/appwrite";
+import { api } from "@/lib/api";
+
 export default function ComplaintsPage() {
+  const [user, setUser] = useState<any>(null);
+  const [role, setRole] = useState<string>("student");
+  const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const initPage = async () => {
+      try {
+        setLoading(true);
+        const currentUser = await account.get();
+        setUser(currentUser);
+
+        // Sync with Backend Role
+        try {
+          const dbUser = await api.get(`/v1/users/me?email=${currentUser.email}`);
+          setRole(dbUser.role);
+        } catch (dbErr) {
+          console.warn("ComplaintsPage: Role sync failed, defaulting to student", dbErr);
+          setRole("student");
+        }
+      } catch (err) {
+        console.error("ComplaintsPage: Auth failed", err);
+        window.location.href = "/login?error=unauthenticated";
+      } finally {
+        setLoading(false);
+      }
+    };
+    initPage();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-[400px] w-full items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-[1440px] mx-auto">
-      <div className="flex flex-col gap-1 mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Complaints</h1>
-        <p className="text-gray-500 text-sm">Manage and review student formal complaints</p>
+    <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-6 p-1 md:grid-cols-12 min-h-screen">
+      {/* Header */}
+      <div className="md:col-span-12 mb-2">
+        <Reveal delay="0s">
+          <h2 className="text-2xl font-bold text-white tracking-tight">Case Management</h2>
+          <p className="text-white/40 text-sm mt-1">
+            {role === 'admin' 
+              ? "Global campus reports and resolution tracking." 
+              : "Track and manage your submitted reports."}
+          </p>
+        </Reveal>
       </div>
       
-      <div className="glass rounded-[10px] p-12 flex flex-col items-center justify-center border border-white/[0.05] min-h-[400px]">
-        <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-6">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0062FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-          </svg>
-        </div>
-        <h2 className="text-xl font-semibold text-white mb-2">Complaints Management</h2>
-        <p className="text-gray-500 text-center max-w-md">
-          This section will house the detailed complaints management system, including filtering, sorting, and priority assignment.
-        </p>
+      {/* Table Workspace */}
+      <div className="md:col-span-12 relative">
+        <ManagementTable 
+            role={role} 
+            userEmail={user.email} 
+            onSelectComplaint={(id) => setSelectedId(id)} 
+        />
+        
+        {/* Sidebar Overlay (if ID is selected) */}
+        {selectedId && (
+            <>
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity" 
+                onClick={() => setSelectedId(null)}
+              />
+              <ComplaintDetailSidebar 
+                  id={selectedId} 
+                  role={role} 
+                  onClose={() => setSelectedId(null)}
+                  onActionComplete={() => {
+                      // Trigger a table re-render if needed or just sync state
+                      window.location.reload(); // Simple sync for now
+                  }}
+              />
+            </>
+        )}
       </div>
     </div>
   );
