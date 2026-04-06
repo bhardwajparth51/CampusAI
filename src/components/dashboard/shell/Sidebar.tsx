@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icons } from "@/components/ui/Icons";
+import NewComplaintModal from "@/components/dashboard/management/NewComplaintModal";
 
 // --- Navigation Metadata ---
 
@@ -54,12 +55,44 @@ const NavLink = ({ item, isActive }: NavLinkProps) => (
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <aside
       className="glass sticky top-0 z-20 flex h-full w-[240px] shrink-0 flex-col border-r border-white/[0.05] py-6"
       aria-label="Sidebar navigation"
     >
+      <div className="mb-6 px-3">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-white/[0.04]"
+          style={{
+            background: "linear-gradient(135deg, rgba(0, 98, 255, 0.1) 0%, rgba(0, 98, 255, 0.02) 100%)",
+            border: "1px solid rgba(0, 98, 255, 0.15)",
+          }}
+        >
+          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500/10 transition-colors group-hover:bg-blue-500/20">
+            <Icons.Plus className="h-3 w-3 text-blue-500" />
+          </div>
+          <span className="text-[13px] font-bold text-white group-hover:text-white/90">
+            New Case
+          </span>
+          <div className="absolute inset-0 bg-blue-500/[0.02] opacity-0 transition-opacity group-hover:opacity-100" />
+        </button>
+      </div>
+
+      <NewComplaintModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSuccess={() => {
+           // If we're on the dashboard or complaints page, a simple sync/reload or state update will be needed.
+           // For now, let's keep it simple and the user will see it when they navigate or if the page re-renders.
+           if (pathname === "/dashboard/complaints" || pathname === "/dashboard") {
+              window.location.reload();
+           }
+        }}
+      />
+
       {/* Top Section: Main Navigation */}
       <nav className="flex flex-1 flex-col gap-1 px-3">
         {NAV_ITEMS.map((item) => (

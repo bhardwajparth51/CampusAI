@@ -6,12 +6,16 @@ import ComplaintDetailSidebar from "@/components/dashboard/management/ComplaintD
 import { Reveal } from "@/components/ui/Reveal";
 import { account } from "@/lib/appwrite";
 import { api } from "@/lib/api";
+import { Icons } from "@/components/ui/Icons";
+import { CTAButton } from "@/components/ui/CTAButton";
+import NewComplaintModal from "@/components/dashboard/management/NewComplaintModal";
 
 export default function ComplaintsPage() {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<string>("student");
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
   useEffect(() => {
     const initPage = async () => {
@@ -49,7 +53,7 @@ export default function ComplaintsPage() {
   return (
     <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-6 p-1 md:grid-cols-12 min-h-screen">
       {/* Header */}
-      <div className="md:col-span-12 mb-2">
+      <div className="md:col-span-12 mb-2 flex items-center justify-between">
         <Reveal delay="0s">
           <h2 className="text-2xl font-bold text-white tracking-tight">Case Management</h2>
           <p className="text-white/40 text-sm mt-1">
@@ -58,7 +62,25 @@ export default function ComplaintsPage() {
               : "Track and manage your submitted reports."}
           </p>
         </Reveal>
+
+        {role === 'student' && (
+          <CTAButton 
+            onClick={() => setIsNewModalOpen(true)}
+            className="h-10 px-5 text-sm font-bold"
+          >
+            <Icons.PlusCircle className="h-4 w-4" />
+            New Case
+          </CTAButton>
+        )}
       </div>
+
+      <NewComplaintModal 
+        isOpen={isNewModalOpen} 
+        onClose={() => setIsNewModalOpen(false)} 
+        onSuccess={() => {
+           window.location.reload(); // Quick refresh to show the new complaint
+        }}
+      />
       
       {/* Table Workspace */}
       <div className="md:col-span-12 relative">
