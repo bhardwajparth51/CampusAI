@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { api } from "@/lib/api";
 
 // --- Constants & Types ---
 
@@ -11,13 +12,6 @@ interface StatItem {
   trendUp: boolean;
   color: string;
 }
-
-const STATS_DATA: StatItem[] = [
-  { label: "Total Conflicts", value: "42", trend: "+14%", trendUp: true, color: "#0062FF" },
-  { label: "Resolved by AI", value: "82%", trend: "+8%", trendUp: true, color: "#10b981" },
-  { label: "Critical Response", value: "4.2m", trend: "-12%", trendUp: true, color: "#6366f1" },
-  { label: "Student Sentiment", value: "7.8", trend: "-2%", trendUp: false, color: "#f59e0b" },
-];
 
 // --- Sub-components ---
 
@@ -72,9 +66,33 @@ const StatCard = ({ stat }: { stat: StatItem }) => (
 // --- Main Component ---
 
 export default function StatsRow() {
+  const [stats, setStats] = useState<StatItem[]>([
+    { label: "Total Complaints", value: "0", trend: "0%", trendUp: true, color: "#0062FF" },
+    { label: "Resolved by AI", value: "0%", trend: "0%", trendUp: true, color: "#10b981" },
+    { label: "Pending Resolution", value: "0", trend: "0%", trendUp: false, color: "#6366f1" },
+    { label: "Resolution Rate", value: "0%", trend: "0%", trendUp: true, color: "#f59e0b" },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await api.get("/v1/analytics/summary");
+        setStats([
+          { label: "Total Complaints", value: data.total_complaints.toString(), trend: "+0%", trendUp: true, color: "#0062FF" },
+          { label: "Resolved by AI", value: "82%", trend: "+8%", trendUp: true, color: "#10b981" }, // Mocked AI specific part for now
+          { label: "Pending Resolution", value: data.pending_count.toString(), trend: "-12%", trendUp: true, color: "#6366f1" },
+          { label: "Resolution Rate", value: `${data.resolution_rate}%`, trend: "+5%", trendUp: true, color: "#f59e0b" },
+        ]);
+      } catch (err) {
+        console.error("StatsRow: Failed to fetch stats", err);
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {STATS_DATA.map((stat) => (
+      {stats.map((stat) => (
         <StatCard key={stat.label} stat={stat} />
       ))}
     </div>

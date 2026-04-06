@@ -1,84 +1,115 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { api } from "@/lib/api";
+
+// --- Constants & Types ---
+
+const CATEGORY_COLORS: Record<string, string> = {
+  "Network": "#0062FF",
+  "Maintenance": "#10b981",
+  "Academic": "#6366f1",
+  "Hostel": "#f59e0b",
+  "Security": "#ef4444",
+  "Administrative": "#a78bfa",
+  "General": "#6b7280",
+  "Unclassified": "#334155"
+};
+
+interface CategoryData {
+  category: string;
+  count: number;
+  percentage: number;
+}
+
+// --- Main StatusDonut Component ---
+
 export default function StatusDonut() {
+  const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const data = await api.get("/v1/analytics/categories");
+        setCategories(data);
+      } catch (err) {
+        console.error("StatusDonut: Failed to fetch categories", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const total = categories.reduce((acc, curr) => acc + curr.count, 0);
+
   return (
-    <div 
-      className="glass flex-[3] rounded-[10px] p-6 flex flex-col relative overflow-hidden"
-    >
+    <div className="glass group relative flex h-full flex-col overflow-hidden rounded-[10px] p-6 antialiased">
+      {/* Visual Accent */}
       <div 
-        className="absolute top-0 left-0 w-full h-[1px]" 
-        style={{ background: 'var(--border-shine)' }}
+        className="absolute top-0 left-0 h-px w-full" 
+        style={{ background: "linear-gradient(to right, transparent, rgba(59, 130, 246, 0.1), transparent)" }} 
       />
-      <h3 style={{ color: '#fff', fontSize: '15px', fontWeight: '600', marginBottom: '4px' }}>Status Breakdown</h3>
-      <p style={{ color: '#6b7280', fontSize: '12px', marginBottom: '24px' }}>Resolution efficiency</p>
-           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-        <svg width="160" height="160" viewBox="0 0 100 100">
-          <defs>
-            <linearGradient id="resolvedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#06B6D4', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: '#0062FF', stopOpacity: 1 }} />
-            </linearGradient>
-            <linearGradient id="pendingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#A855F7', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
-            </linearGradient>
-            <linearGradient id="newGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#F9FAFB', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: '#D1D5DB', stopOpacity: 1 }} />
-            </linearGradient>
-          </defs>
-          
-          <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="7" />
-          
-          {/* Resolved Segment */}
-          <circle 
-            cx="50" cy="50" r="40" fill="none" 
-            stroke="url(#resolvedGradient)" strokeWidth="8" 
-            strokeDasharray="180 251" strokeDashoffset="0" 
-            strokeLinecap="round"
-            style={{ filter: 'drop-shadow(0 0 5px rgba(6, 182, 212, 0.4))' }}
-          />
-          
-          {/* Pending Segment */}
-          <circle 
-            cx="50" cy="50" r="40" fill="none" 
-            stroke="url(#pendingGradient)" strokeWidth="8" 
-            strokeDasharray="50 251" strokeDashoffset="-185" 
-            strokeLinecap="round" 
-          />
 
-          {/* New Segment - Solid Gray for Legibility */}
-          <circle 
-            cx="50" cy="50" r="40" fill="none" 
-            stroke="#6b7280" strokeWidth="8" 
-            strokeDasharray="15 251" strokeDashoffset="-240" 
-            strokeLinecap="round" 
-          />
-        </svg>
-        <div style={{ position: 'absolute', textAlign: 'center' }}>
-          <div style={{ color: '#fff', fontSize: '24px', fontWeight: '800', letterSpacing: '-0.5px' }}>82%</div>
-          <div style={{ color: '#06B6D4', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>Resolved</div>
-        </div>
-      </div>
+      {/* Header */}
+      <h3 className="mb-8 text-sm font-semibold tracking-tight text-white md:text-base">Categorization</h3>
 
-      <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {[
-          { label: 'Resolved', color: '#06B6D4', value: '82%' },
-          { label: 'Pending', color: '#A855F7', value: '12%' },
-          { label: 'New', color: '#6b7280', value: '6%' },
-        ].map((item) => (
-          <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div 
-                style={{ 
-                  width: '10px', height: '10px', borderRadius: '3px', background: item.color,
-                  boxShadow: item.label === 'New' ? '0 0 4px rgba(255, 255, 255, 0.2)' : `0 0 8px ${item.color}44`
-                }} 
-              />
-              <span style={{ color: '#9ca3af', fontSize: '12px', fontWeight: '500' }}>{item.label}</span>
+      {/* Main Content Area */}
+      <div className="flex flex-1 flex-col items-center justify-center">
+        {loading ? (
+             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500/20 border-t-blue-500" />
+        ) : categories.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 opacity-30 px-4 text-center">
+               <div className="text-2xl">📦</div>
+               <p className="text-[11px] font-bold uppercase tracking-widest text-white italic">
+                 Awaiting classification data
+               </p>
             </div>
-            <span style={{ color: '#fff', fontSize: '12px', fontWeight: '600' }}>{item.value}</span>
-          </div>
-        ))}
+        ) : (
+            <div className="w-full space-y-6">
+                {/* Simplified List View for categorized data */}
+                <div className="space-y-4">
+                  {categories.map((item) => (
+                    <div key={item.category} className="group/item flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="h-1.5 w-1.5 rounded-full shadow-[0_0_8px_currentColor]" 
+                            style={{ color: CATEGORY_COLORS[item.category] || CATEGORY_COLORS["General"] }} 
+                          />
+                          <span className="text-xs font-bold text-gray-400 group-hover/item:text-gray-200 transition-colors">
+                            {item.category}
+                          </span>
+                        </div>
+                        <span className="text-[11px] font-bold text-white/50">{item.percentage}%</span>
+                      </div>
+                      <div className="h-1 w-full rounded-full bg-white/[0.04] overflow-hidden">
+                        <div 
+                           className="h-full rounded-full transition-all duration-1000"
+                           style={{ 
+                             width: `${item.percentage}%`, 
+                             backgroundColor: CATEGORY_COLORS[item.category] || CATEGORY_COLORS["General"] 
+                           }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+            </div>
+        )}
       </div>
+
+      {/* Footer Info */}
+      {categories.length > 0 && !loading && (
+        <div className="mt-8 border-t border-white/[0.03] pt-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Total Distribution</span>
+            <span className="text-[13px] font-bold text-white">{total} Items</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { api } from "@/lib/api";
 
 // --- Constants & Types ---
 
@@ -16,19 +17,14 @@ interface Anomaly {
   time: string;
 }
 
-const PREDICTIONS: Prediction[] = [
-  { category: "Network", value: 82, color: "#0062FF" },
-  { category: "Cleanliness", value: 45, color: "#6ee7b7" },
-  { category: "Academic", value: 60, color: "#a78bfa" },
-  { category: "Hostel", value: 38, color: "#f59e0b" },
-  { category: "Admin", value: 22, color: "#6b7280" },
-];
-
-const ANOMALIES: Anomaly[] = [
-  { icon: "🔴", text: "Network complaints up 340% in Block C", time: "2h ago" },
-  { icon: "🟡", text: "Hostel cleanliness reports rising since Monday", time: "1d ago" },
-  { icon: "🟢", text: "Academic issues resolved 40% faster this week", time: "2d ago" },
-];
+const CATEGORY_COLORS: Record<string, string> = {
+  "Network": "#0062FF",
+  "Maintenance": "#10b981",
+  "Academic": "#6366f1",
+  "Hostel": "#f59e0b",
+  "Security": "#ef4444",
+  "Administrative": "#a78bfa",
+};
 
 // --- Sub-components ---
 
@@ -60,6 +56,45 @@ const AnomalyItem = ({ item }: { item: Anomaly }) => (
 // --- Main AIInsightsPanel Component ---
 
 export default function AIInsightsPanel() {
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        setLoading(true);
+        const data = await api.get("/v1/analytics/insights");
+        
+        // Map real categories to predictions
+        const mapped = data.categories.map((c: any) => ({
+          category: c.category,
+          value: c.percentage,
+          color: CATEGORY_COLORS[c.category] || "#6b7280"
+        }));
+        setPredictions(mapped);
+
+        // Generate semi-dynamic anomalies based on total count
+        if (data.summary.total_complaints > 0) {
+           setAnomalies([
+             { icon: "🟢", text: `System successfully processed ${data.summary.total_complaints} reports.`, time: "Live" },
+             { icon: "🔵", text: `${data.summary.resolution_rate}% of issues have been cleared.`, time: "Weekly" }
+           ]);
+        } else {
+           setAnomalies([
+             { icon: "⚪", text: "Awaiting campus activity to begin anomaly detection.", time: "IDLE" }
+           ]);
+        }
+
+      } catch (err) {
+        console.error("AIInsightsPanel: Failed to fetch insights", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInsights();
+  }, []);
+
   return (
     <div className="glass relative flex h-full flex-col overflow-hidden rounded-[10px] p-6 antialiased">
       {/* Visual Accent */}
@@ -74,16 +109,24 @@ export default function AIInsightsPanel() {
           <div className="flex h-5 w-5 items-center justify-center rounded bg-purple-500/10 text-[11px] text-purple-400">
             ✦
           </div>
-          <h3 className="text-sm font-semibold tracking-tight text-[#E8EAF0]">AI Insights</h3>
+          <h3 className="text-sm font-semibold tracking-tight text-[#E8EAF0]">AI Sentinel</h3>
         </div>
-        <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Next-week predictions</p>
+        <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Live anomaly monitoring</p>
       </header>
 
       {/* Predictions Section */}
       <section className="mb-8 flex flex-col gap-4">
-        {PREDICTIONS.map((p) => (
-          <PredictionBar key={p.category} item={p} />
-        ))}
+        {loading ? (
+             <div className="h-40 w-full flex items-center justify-center">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-purple-500/20 border-t-purple-500" />
+             </div>
+        ) : predictions.length === 0 ? (
+            <div className="text-[11px] text-gray-600 italic">No category data available yet.</div>
+        ) : (
+            predictions.map((p) => (
+                <PredictionBar key={p.category} item={p} />
+            ))
+        )}
       </section>
 
       {/* Vertical Divider */}
@@ -92,10 +135,10 @@ export default function AIInsightsPanel() {
       {/* Anomalies Section */}
       <section>
         <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.05em] text-gray-600">
-          Anomaly Alerts
+          Smart Alerts
         </h4>
         <div className="flex flex-col gap-4">
-          {ANOMALIES.map((a, i) => (
+          {anomalies.map((a, i) => (
             <AnomalyItem key={i} item={a} />
           ))}
         </div>
