@@ -9,8 +9,10 @@ class ComplaintStatus(str, enum.Enum):
     CLASSIFIED = "classified"
     ASSIGNED = "assigned"
     IN_PROGRESS = "in_progress"
+    PENDING_CONFIRMATION = "pending_confirmation"
     RESOLVED = "resolved"
     REJECTED = "rejected"
+    ESCALATED = "escalated"
 
 class Complaint(Base):
     __tablename__ = "complaints"
@@ -22,6 +24,12 @@ class Complaint(Base):
     priority = Column(String, index=True, default="low") # low, medium, high, critical
     priority_score = Column(Integer, default=0)
     status = Column(String, default=ComplaintStatus.PENDING)
+    
+    # Resolution Tracking
+    rejection_count = Column(Integer, default=0)
+    pending_confirmation_at = Column(DateTime(timezone=True), nullable=True)
+    admin_resolution_note = Column(Text, nullable=True)
+    student_feedback = Column(Text, nullable=True)
     
     student_id = Column(Integer, ForeignKey("users.id"))
     student = relationship("User", backref="complaints")

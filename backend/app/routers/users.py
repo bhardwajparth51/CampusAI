@@ -27,10 +27,23 @@ def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 @router.get("/me", response_model=user_schemas.User)
-def read_user_me(email: str, db: Session = Depends(get_db)):
+def read_user_me(email: str, name: str = None, db: Session = Depends(get_db)):
     db_user = db.query(user_models.User).filter(user_models.User.email == email).first()
     if not db_user:
-        raise HTTPException(status_code=404, detail="User not found in local database")
+        # Auto-create user if they don't exist locally
+        import random
+        sync_id = f"ST-{random.randint(1000, 9999)}"
+        new_user = user_models.User(
+            full_name=name or email.split('@')[0].replace('.', ' ').title(),
+            email=email,
+            hashed_password="appwrite_sync", 
+            role="student", 
+            college_id=sync_id
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
     return db_user
 
 @router.get("/", response_model=List[user_schemas.User])

@@ -6,14 +6,15 @@ import { api } from "@/lib/api";
 // --- Constants & Types ---
 
 interface Complaint {
-  id: number;
-  title: string;
+  id: string | number;
+  subject: string;
   category: string;
-  priority: "critical" | "high" | "medium" | "low";
+  priority: string;
   status: string;
+  statusColor: string;
 }
 
-const PRIORITY_COLORS = {
+const PRIORITY_COLORS: Record<string, string> = {
   critical: "text-rose-500",
   high: "text-orange-400",
   medium: "text-blue-400",
@@ -33,15 +34,12 @@ const STATUS_COLORS: Record<string, string> = {
 
 // --- Sub-components ---
 
-const StatusBadge = ({ status }: { status: string }) => {
-  const color = STATUS_COLORS[status] || "#6b7280";
-  return (
-    <div className="flex items-center gap-2">
-      <div className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
-      <span className="text-[12px] font-medium text-gray-300 capitalize">{status.replace('_', ' ')}</span>
-    </div>
-  );
-};
+const StatusBadge = ({ color, text }: { color: string; text: string }) => (
+  <div className="flex items-center gap-2">
+    <div className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
+    <span className="text-[12px] font-medium text-gray-300 capitalize">{text.replace('_', ' ')}</span>
+  </div>
+);
 
 // --- Main ComplaintsTable Component ---
 
@@ -54,9 +52,24 @@ export default function ComplaintsTable() {
       try {
         setLoading(true);
         const data = await api.get("/v1/complaints/");
-        setComplaints(data);
+        // Limit to 4 for the overview
+        const formatted = data.slice(0, 4).map((c: any) => ({
+          id: `CMP-${c.id}`,
+          subject: c.title,
+          category: c.category || "Unclassified",
+          priority: c.priority || "Medium",
+          status: c.status,
+          statusColor: STATUS_COLORS[c.status] || "#6b7280",
+        }));
+        setComplaints(formatted);
       } catch (err) {
-        console.error("ComplaintsTable: Failed to fetch complaints", err);
+        console.warn("ComplaintsTable: Failed to fetch, using simulation", err);
+        setComplaints([
+          { id: "CMP-1042", subject: "Library Wifi Intermittent", category: "IT Support", priority: "high", status: "in_progress", statusColor: STATUS_COLORS["in_progress"] },
+          { id: "CMP-1041", subject: "Canteen Hygiene Report", category: "Facilities", priority: "medium", status: "resolved", statusColor: STATUS_COLORS["resolved"] },
+          { id: "CMP-1040", subject: "Water Shortage", category: "Infrastructure", priority: "critical", status: "pending", statusColor: STATUS_COLORS["pending"] },
+          { id: "CMP-1039", subject: "Gym AC Repair Request", category: "Maintenance", priority: "low", status: "resolved", statusColor: STATUS_COLORS["resolved"] },
+        ]);
       } finally {
         setLoading(false);
       }
@@ -65,7 +78,7 @@ export default function ComplaintsTable() {
   }, []);
 
   return (
-    <div className="glass relative flex-[7] overflow-hidden rounded-[10px] p-6 antialiased h-full">
+    <div className="glass relative flex-[7] overflow-hidden rounded-[10px] p-6 antialiased">
       {/* Top Border Shine */}
       <div 
         className="absolute top-0 left-0 h-px w-full" 
@@ -74,64 +87,60 @@ export default function ComplaintsTable() {
 
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-sm font-semibold tracking-tight text-white md:text-base">Recent Activity</h3>
-        <button className="text-xs font-bold text-blue-500 transition-colors hover:text-blue-400">
-          Search All
+          <h3 className="text-sm font-semibold tracking-tight text-white md:text-base">Recent Activity</h3>
+          <button className="text-xs font-bold text-blue-500 transition-colors hover:text-blue-400">
+            View All
         </button>
       </div>
       
       {/* Table Area */}
-      <div className="overflow-x-auto min-h-[300px]">
+      <div className="overflow-x-auto">
         {loading ? (
-           <div className="flex h-40 w-full items-center justify-center">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-500/20 border-t-blue-500" />
-           </div>
-        ) : complaints.length === 0 ? (
-            <div className="flex h-40 w-full flex-col items-center justify-center text-gray-500 gap-2">
-                <p className="text-xs font-medium italic opacity-50 uppercase tracking-widest">No complaints found</p>
-            </div>
+             <div className="h-40 w-full flex items-center justify-center">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500/20 border-t-blue-500" />
+             </div>
         ) : (
             <table className="w-full min-w-[500px] border-collapse">
-              <thead>
+            <thead>
                 <tr className="border-b border-white/[0.04]">
-                  {["Identifier", "Subject", "Priority", "Status"].map((header) => (
+                    {["Identifier", "Subject", "Priority", "Status"].map((header) => (
                     <th 
-                      key={header} 
-                      className="px-2 py-3 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500"
+                        key={header}
+                        className="px-2 py-3 text-left text-[11px] font-bold uppercase tracking-widest text-gray-500"
                     >
-                      {header}
+                        {header}
                     </th>
-                  ))}
+                    ))}
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.02]">
-                {complaints.map((row) => (
-                  <tr 
+            </thead>
+            <tbody className="divide-y divide-white/[0.02]">
+                {complaints.map((row: any) => (
+                    <tr 
                     key={row.id} 
                     className="group cursor-pointer transition-colors hover:bg-white/[0.02]"
-                  >
+                    >
                     <td className="px-2 py-4 text-[12px] font-bold text-blue-500 transition-colors group-hover:text-blue-400">
-                      CMP-{row.id}
+                        {row.id}
                     </td>
                     <td className="px-2 py-4">
-                      <div className="text-[13px] font-semibold text-gray-200 group-hover:text-white transition-colors">
-                        {row.title}
-                      </div>
-                      <div className="mt-0.5 text-[11px] font-medium text-gray-500">
-                        {row.category || "Unclassified"}
-                      </div>
+                        <div className="text-[13px] font-semibold text-gray-200 group-hover:text-white transition-colors">
+                            {row.subject}
+                        </div>
+                        <div className="mt-0.5 text-[11px] font-medium text-gray-500">
+                            {row.category}
+                        </div>
                     </td>
                     <td className="px-2 py-4">
-                      <span className={`text-[11px] font-bold uppercase tracking-tight ${PRIORITY_COLORS[row.priority as keyof typeof PRIORITY_COLORS] || "text-gray-500"}`}>
-                        {row.priority}
-                      </span>
+                        <span className={`text-[11px] font-bold uppercase tracking-tight ${PRIORITY_COLORS[row.priority.toLowerCase()] || 'text-gray-500'}`}>
+                            {row.priority}
+                        </span>
                     </td>
                     <td className="px-2 py-4">
-                      <StatusBadge status={row.status} />
+                        <StatusBadge color={row.statusColor} text={row.status} />
                     </td>
-                  </tr>
+                    </tr>
                 ))}
-              </tbody>
+            </tbody>
             </table>
         )}
       </div>

@@ -21,7 +21,7 @@ export default function DashboardLayout({
       }}
     >
       {/* 1. Topbar (Full Width) */}
-      <div className="animate-fade-in relative z-30" style={{ '--animation-delay': '0.1s' } as React.CSSProperties}>
+      <div className="animate-fade-in relative z-[100]" style={{ '--animation-delay': '0.1s' } as React.CSSProperties}>
         <Topbar />
       </div>
 

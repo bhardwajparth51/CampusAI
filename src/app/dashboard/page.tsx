@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
         // 2. Sync with Backend Role
         try {
-          const dbUser = await api.get(`/v1/users/me?email=${currentUser.email}`);
+          const dbUser = await api.get(`/v1/users/me?email=${currentUser.email}&name=${encodeURIComponent(currentUser.name)}`);
           setRole(dbUser.role);
           console.log("DashboardPage: Role synced from backend:", dbUser.role);
         } catch (dbErr) {

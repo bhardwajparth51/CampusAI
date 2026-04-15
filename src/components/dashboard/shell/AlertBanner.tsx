@@ -21,7 +21,7 @@ export default function AlertBanner() {
         </div>
         <div className="text-gray-300 text-xs md:text-sm font-medium leading-relaxed">
           <span className="text-blue-500 font-bold">High Alert:</span> 
-          <span className="ml-2 text-white/90">14 student reports filed regarding "Hostel Water Supply" in block C.</span>
+          <span className="ml-2 text-white/90">14 student reports filed regarding "Water Supply" in block D.</span>
         </div>
       </div>
       

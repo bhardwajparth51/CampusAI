@@ -1,0 +1,33 @@
+services:
+  # Next.js Frontend
+  - type: web
+    name: campus-ai-frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: campus-ai-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NEXT_PUBLIC_APPWRITE_PROJECT_ID
+        value: 69b907400023414ffd36
+      - key: NEXT_PUBLIC_APPWRITE_PROJECT_NAME
+        value: CampusAI
+      - key: NEXT_PUBLIC_APPWRITE_ENDPOINT
+        value: https://sfo.cloud.appwrite.io/v1
+
+  # FastAPI Backend
+  - type: web
+    name: campus-ai-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: campus-ai-frontend
+          envVarKey: RENDER_EXTERNAL_URL

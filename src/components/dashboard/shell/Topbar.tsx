@@ -53,6 +53,17 @@ export default function Topbar() {
       try {
         const currentUser = await account.get();
         setUser(currentUser);
+        
+        // --- Sync Role with Backend Database ---
+        try {
+          const { api } = await import("@/lib/api");
+          const dbUser = await api.get(`/v1/users/me?email=${currentUser.email}&name=${encodeURIComponent(currentUser.name)}`);
+          if (dbUser?.role) {
+            setUser((prev: any) => ({ ...prev, dbRole: dbUser.role }));
+          }
+        } catch (dbErr) {
+          console.warn("Topbar: Failed to sync role from db", dbErr);
+        }
       } catch (err) {
         console.error("Failed to fetch user", err);
       }
@@ -108,7 +119,7 @@ export default function Topbar() {
 
   return (
     <header
-      className="glass relative z-30 flex h-[56px] shrink-0 items-center justify-between border-b border-white/[0.05] px-5"
+      className="glass relative z-[100] flex h-[56px] shrink-0 items-center justify-between border-b border-white/[0.05] px-5"
       role="banner"
     >
       {/* Left: Branding & Breadcrumbs */}
@@ -157,8 +168,8 @@ export default function Topbar() {
             </div>
             <div className="hidden flex-col items-start leading-[1.1] lg:flex">
               <span className="text-[12px] font-bold text-white/90">{user?.name || "Loading..."}</span>
-              <span className="text-[10px] font-medium tracking-tight text-white/30">
-                {user?.prefs?.role === 'admin' ? 'Admin' : 'Student'}
+              <span className="text-[10px] font-medium tracking-tight text-white/30 capitalize">
+                {user?.dbRole || 'Student'}
               </span>
             </div>
             <Icons.ChevronDown 

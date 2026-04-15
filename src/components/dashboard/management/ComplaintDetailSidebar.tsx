@@ -66,7 +66,7 @@ export default function ComplaintDetailSidebar({ id, role, onClose, onActionComp
   if (!id) return null;
 
   return (
-    <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-md transform bg-[#0A0A0B]/95 backdrop-blur-2xl border-l border-white/10 shadow-2xl transition-all duration-300 ease-in-out ${id ? "translate-x-0" : "translate-x-full"}`}>
+    <div className={`fixed top-[56px] right-0 z-50 w-full max-w-md h-[calc(100vh-56px)] transform bg-[#0A0A0B]/95 backdrop-blur-2xl border-l border-white/10 shadow-2xl transition-all duration-300 ease-in-out ${id ? "translate-x-0" : "translate-x-full"}`}>
       <div className="flex h-full flex-col p-8 antialiased">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between border-b border-white/[0.05] pb-6">
@@ -116,7 +116,9 @@ export default function ComplaintDetailSidebar({ id, role, onClose, onActionComp
 
              {/* Actions */}
              <div className="mt-auto pt-6 border-t border-white/[0.05]">
-                <h3 className="mb-4 text-[11px] font-bold uppercase tracking-widest text-gray-500">Management Panel</h3>
+                <h3 className="mb-4 text-[11px] font-bold uppercase tracking-widest text-gray-500">
+                  {role === 'student' ? 'Resolution Approval' : 'Management Panel'}
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
                    {role === 'student' && complaint.status === 'pending_confirmation' ? (
                        <>
