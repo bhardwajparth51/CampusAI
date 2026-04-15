@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 groq
-pydantic
+pydantic[email]
 python-dotenv
 slowapi
 SQLAlchemy
